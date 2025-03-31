@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8">
+ <title>Оформление заказа</title>
+</head>
+<body>
+ <h1>Оформление заказа</h1>
+
+ <label for="customer_name">Имя клиента:</label>
+ <input type="text" id="customer_name" name="customer_name"><br><br>
+
+ <ul id="product-list"></ul>
+
+ <button id="place-order">Оформить заказ</button>
+
+ <p>Общая стоимость: <span id="total-price">0</span> руб.</p>
+
+ <script>
+ document.addEventListener('DOMContentLoaded', function() {
+ // Получаем список продуктов из API
+ fetch('https://super-memory-664p54q7vvj34q65-8000.app.github.dev/api/products/', {
+ method: 'GET'
+ })
+ .then(response => {
+ if (!response.ok) {
+ throw new Error(`Ошибка при получении списка продуктов: ${response.statusText}`);
+ }
+ return response.json();
+ })
+ .then(data => {
+ // Заполняем список продуктов
+ const productList = document.getElementById('product-list');
+ data.forEach(product => {
+ const li = document.createElement('li');
+ li.innerHTML = `
+ <input type="checkbox" name="product" value="${product.id}" data-price="${product.price}">
+ ${product.name} - ${product.price} руб.
+ `;
+ productList.appendChild(li);
+ });
+ })
+ .catch(error => {
+ console.error('Ошибка при получении списка продуктов:', error);
+ });
+
+ // Обработчик нажатия на кнопку "Оформить заказ"
+ const placeOrderButton = document.getElementById('place-order');
+ placeOrderButton.addEventListener('click', function() {
+ const customerName = document.getElementById('customer_name').value;
+ const selectedProducts = [];
+ let totalPrice = 0;
+
+ // Собираем выбранные продукты и подсчитываем общую стоимость
+ const checkedProducts = document.querySelectorAll('input[name="product"]:checked');
+ checkedProducts.forEach(product => {
+ selectedProducts.push(product.value);
+ totalPrice += parseFloat(product.dataset.price);
+ });
+
+ // Обновляем общую стоимость на странице
+ document.getElementById('total-price').textContent = totalPrice;
+
+ // Отправляем заказ в API
+ fetch('https://super-memory-664p54q7vvj34q65-8000.app.github.dev/api/orders/', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify({
+ customer_name: customerName,
+ products: selectedProducts,
+ total_price: totalPrice
+ })
+ })
+ .then(response => {
+ if (!response.ok) {
+ throw new Error(`Ошибка при оформлении заказа: ${response.statusText}`);
+ }
+ return response.json();
+ })
+ .then(data => {
+ console.log('Заказ оформлен:', data);
+ alert('Заказ оформлен успешно!');
+ })
+ .catch(error => {
+ console.error('Ошибка при оформлении заказа:', error);
+ alert('Ошибка при оформлении заказа. Пожалуйста, попробуйте снова.');
+ });
+ });
+ });
+ </script>
+</body>
+</html>

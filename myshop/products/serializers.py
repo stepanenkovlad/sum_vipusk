@@ -7,6 +7,8 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
+    products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
+
     class Meta:
         model = Order
         fields = '__all__'

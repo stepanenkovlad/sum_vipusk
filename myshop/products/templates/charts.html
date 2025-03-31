@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Отчёт по продуктам</title>
+    <!-- Подключаем Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Отчёт по популярности продуктов</h1>
+    
+    <!-- Контейнер для графика -->
+    <div>
+        {{ chart|safe }}
+    </div>
+    
+    <a href="/api/">API</a> | 
+    <a href="/admin/">Админка</a>
+</body>
+</html>
