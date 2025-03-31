@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-g=i19x$huq1200$3y=@k3$lkkfr4sczp&-8fr19kxgt30oi%34
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,3 +129,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS =  [
 'https://super-memory-664p54q7vvj34q65-5500.app.github.dev',
 ]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

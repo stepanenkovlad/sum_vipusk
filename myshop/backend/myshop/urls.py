@@ -11,5 +11,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api/chart/', ProductOrdersChartAPIView.as_view(), name='chart-api'),
-    path('charts', charts_view, name='charts')
+    path('', charts_view, name='charts')
 ]
