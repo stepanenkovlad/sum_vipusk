@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=myshop.settings
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5500:80"  # Изменено на порт 5500 для фронтенда
+    depends_on:
+      - backend
+    restart: unless-stopped
